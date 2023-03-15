@@ -12,8 +12,9 @@ class Player:
     def __repr__(self):
         return f"{self.first_name} {self.last_name}"
 
-    def to_dict(self, player):  # TODO : A definir
-        return vars(player)
+    def to_dict(self):
+        return self.__dict__
 
-    def from_dict(self):  # TODO : A definir
-        pass
+    @classmethod
+    def from_dict(cls, player_dict):
+        return cls(**player_dict)
