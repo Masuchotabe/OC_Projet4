@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from src.models import Round
+from src.models import Round, Player
 from src.dabatase import get_players
 
 
 class Tournament:
-    def __init__(self, name, location, start_date, players, end_date=None,
+    def __init__(self, name, location, start_date, players: List[Player]=None, end_date=None,
                  number_of_rounds=4, description=None, actual_round=1, players_scores=None, rounds=None):
         self.name = name
         self.description = description
@@ -16,9 +16,9 @@ class Tournament:
 
         self.number_of_rounds = number_of_rounds
         self.actual_round = actual_round
-        self.rounds = rounds
+        self.rounds = rounds or []
 
-        self.players = players
+        self.players = players or []
         self.players_scores = ([{player.national_chess_identifier: 0} for player in players]
                                if not players_scores else players_scores)
 
@@ -48,7 +48,7 @@ class Tournament:
             end_date=obj_dict['end_date'],
             number_of_rounds=obj_dict['number_of_rounds'],
             actual_round=obj_dict['actual_round'],
-            rounds=[Round.from_dict(json_string) for json_string in obj_dict['rounds']],
+            rounds=[Round.from_dict(round_dict) for round_dict in obj_dict['rounds']],
             players=[player for player in get_players() if player.national_chess_identifier in obj_dict['players']],
             players_scores=obj_dict['players_scores'],
         )

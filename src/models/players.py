@@ -16,5 +16,5 @@ class Player:
         return self.__dict__
 
     @classmethod
-    def from_dict(cls, player_dict):
-        return cls(**player_dict)
+    def from_dict(cls, obj_dict):
+        return cls(**obj_dict)
