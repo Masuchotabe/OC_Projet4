@@ -1,7 +1,8 @@
+import random
 from datetime import datetime
 from typing import List
 
-from src.models import Round, Player
+from src.models import Round, Player, Match
 from src.dabatase import get_players
 
 
@@ -52,3 +53,36 @@ class Tournament:
             players=[player for player in get_players() if player.national_chess_identifier in obj_dict['players']],
             players_scores=obj_dict['players_scores'],
         )
+
+    def start_round(self):
+        """
+        Fonction permettant de commencer un nouveau round. Les matchs sont créées selon des conditions:
+        :return:
+        """
+        if len(self.rounds) > 0:  # On classe
+            pass
+        else:  # on mélange les joueurs
+            players_list = self.players
+            random.shuffle(players_list)
+        new_matches = [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
+
+
+
+
+
+    @property
+    def matches(self):
+        all_matches = []
+        for round in self.rounds:
+            if round.matches:
+                all_matches.append(round.matches)
+        return all_matches
+
+    """
+    TODO : 
+        - démarrer un nouveau round : 
+            - Methode get_match if rounds 
+            - si pas pas de rounds, randomize la liste des joueurs 
+            - si rounds, alors on liste les joueurs par classement 
+                - on génère les paires 
+    """
