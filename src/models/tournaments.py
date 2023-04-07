@@ -8,7 +8,7 @@ from src.dabatase import get_players
 
 class Tournament:
     def __init__(self, name, location, start_date, players: List[Player]=None, end_date=None,
-                 number_of_rounds=4, description=None, actual_round=1, players_scores=None, rounds=None):
+                 number_of_rounds=4, description=None, actual_round=0, players_scores=None, rounds=None):
         self.name = name
         self.description = description
         self.location = location
@@ -64,14 +64,20 @@ class Tournament:
         else:  # on mélange les joueurs
             players_list = self.players
             random.shuffle(players_list)
-        new_matches = [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
+            new_matches = [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
 
+
+        self.rounds.append(Round(f"Round {self.actual_round+1}", new_matches))
 
 
 
 
     @property
     def matches(self):
+        """
+        Propriété permettant de récuperer tous les matchs du tournois
+        :return: all_matches [List]
+        """
         all_matches = []
         for round in self.rounds:
             if round.matches:
