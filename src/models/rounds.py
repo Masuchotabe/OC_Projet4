@@ -20,10 +20,10 @@ class Round:
         }
 
     @classmethod
-    def from_dict(cls, obj_dict):
+    def from_dict(cls, obj_dict, player_manager):
         return cls(
             name=obj_dict['name'],
             start_date=obj_dict['start_date'],
             end_date=obj_dict['end_date'],
-            matches=[Match.from_dict(match_dict) for match_dict in obj_dict['matches']],
+            matches=[Match.from_dict(match_dict, player_manager) for match_dict in obj_dict['matches']],
         )

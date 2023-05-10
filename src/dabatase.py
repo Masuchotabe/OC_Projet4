@@ -1,3 +1,4 @@
+import os.path
 from typing import List
 import json
 from models import Player
@@ -64,7 +65,6 @@ class PlayerManager:
             players.append(Player(**e))
         self._players = players
 
-
     def save_players(self):
         """
         Sauvegarde tous les joueurs dans le fichier json
@@ -74,20 +74,23 @@ class PlayerManager:
         for player in self._players:
             json_data.append(player.to_dict())
 
-        with open(str(self.file_path), 'r') as file:
+        with open(str(self.file_path), 'w') as file:
             json.dump(json_data, file, indent=2)
 
     @property
     def players(self):
+        """
+        Property qui retourne une liste de joueur
+        :return: [Player]
+        """
         return self._players
 
     def get_player(self, national_chess_identifier: str) -> Player:
         """
-
+        Permet de récupérer un joueur par son identifiant national d'échec
         :param national_chess_identifier: Identifiant national d'échec
         :return: obj: Player
         """
-
         for player in self._players:
             if player.national_chess_identifier == national_chess_identifier:
                 return player
@@ -97,4 +100,11 @@ class PlayerManager:
         Ajoute un joueur
         :param player:
         """
+        self._players.append(player)
+        self.save_players()
+
+    def create_player(self, player_information):
+        player = Player(**player_information)
+        self.add_player(player)
+
 

@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import List
 
 from src.models import Round, Player, Match
-from src.dabatase import get_players
 
 
 class Tournament:
@@ -20,8 +19,8 @@ class Tournament:
         self.rounds = rounds or []
 
         self.players = players or []
-        self.players_scores = ([{player.national_chess_identifier: 0} for player in players]
-                               if not players_scores else players_scores)
+        self.players_scores = ({player.national_chess_identifier: 0 for player in players}
+                               if not players_scores and players else players_scores)
 
     def to_dict(self):
         return {
@@ -40,7 +39,7 @@ class Tournament:
         }
 
     @classmethod
-    def from_dict(cls, obj_dict):
+    def from_dict(cls, obj_dict, player_manager):
         return cls(
             name=obj_dict['name'],
             description=obj_dict['description'],
@@ -49,8 +48,10 @@ class Tournament:
             end_date=obj_dict['end_date'],
             number_of_rounds=obj_dict['number_of_rounds'],
             actual_round=obj_dict['actual_round'],
-            rounds=[Round.from_dict(round_dict) for round_dict in obj_dict['rounds']],
-            players=[player for player in get_players() if player.national_chess_identifier in obj_dict['players']],
+            rounds=[Round.from_dict(round_dict, player_manager) for round_dict in obj_dict['rounds']],
+            players=[
+                player for player in player_manager.players if player.national_chess_identifier in obj_dict['players']
+            ],
             players_scores=obj_dict['players_scores'],
         )
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import List
 from src.models import Player
-from src.dabatase import get_player
 
 
 class Match:
@@ -26,10 +25,10 @@ class Match:
         }
 
     @classmethod
-    def from_dict(cls, obj_dict):
+    def from_dict(cls, obj_dict, player_manager):
         return cls(
-            player_1=get_player(national_chess_identifier=obj_dict['player_1']),
-            player_2=get_player(national_chess_identifier=obj_dict['player_2']),
+            player_1=player_manager.get_player(national_chess_identifier=obj_dict['player_1']),
+            player_2=player_manager.get_player(national_chess_identifier=obj_dict['player_2']),
             score_1=obj_dict['score_1'],
             score_2=obj_dict['score_2'],
         )
