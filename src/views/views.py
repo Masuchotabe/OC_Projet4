@@ -39,6 +39,28 @@ class MainView:
                 'birth_date': birth_date,
                 'national_chess_identifier': national_chess_identifier}
 
+    def prompt_for_new_tournament(self):
+        print("Veuillez renseigner les informations du nouveau tournois : ")
+        name = input("Son nom : \n")
+        description = input("Sa description : \n")
+        location = input("Son lieu : \n")
+        number_of_rounds = input("nombre de tours : \n")
+        start_date = input("Sa date de début : \n")
+        end_date = input("Sa date de fin : \n")
+
+        return {'name': name,
+                'description': description,
+                'location': location,
+                'number_of_rounds': number_of_rounds,
+                'start_date': start_date,
+                'end_date': end_date
+                }
+
     def show_players_list(self, players):
         for player in players:
             print(player)
+
+    def show_tournaments_list(self, tournaments):
+        for tournament in tournaments:
+            print(tournament)
+

@@ -6,8 +6,9 @@ from src.models import Round, Player, Match
 
 
 class Tournament:
-    def __init__(self, name, location, start_date, players: List[Player]=None, end_date=None,
+    def __init__(self, identifier, name, location, start_date, players: List[Player]=None, end_date=None,
                  number_of_rounds=4, description=None, actual_round=0, players_scores=None, rounds=None):
+        self.identifier = identifier
         self.name = name
         self.description = description
         self.location = location
@@ -22,8 +23,12 @@ class Tournament:
         self.players_scores = ({player.national_chess_identifier: 0 for player in players}
                                if not players_scores and players else players_scores)
 
+    def __repr__(self):
+        return f"{self.name} - {self.location} - {self.start_date}"
+
     def to_dict(self):
         return {
+            'identifier': self.identifier,
             'name': self.name,
             'description': self.description,
             'location': self.location,
@@ -41,6 +46,7 @@ class Tournament:
     @classmethod
     def from_dict(cls, obj_dict, player_manager):
         return cls(
+            identifier=obj_dict['identifier'],
             name=obj_dict['name'],
             description=obj_dict['description'],
             location=obj_dict['location'],
@@ -67,11 +73,7 @@ class Tournament:
             random.shuffle(players_list)
             new_matches = [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
 
-
         self.rounds.append(Round(f"Round {self.actual_round+1}", new_matches))
-
-
-
 
     @property
     def matches(self):
