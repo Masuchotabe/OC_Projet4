@@ -34,20 +34,27 @@ class MainController:
     def manage_tournaments(self):
         text_choices = ["Afficher tous les tournois",
                         "Créer un tournois",
-                        "Revenir au menu précédent"]
+                        "Démarrer ou continuer un tournois",
+                        "Revenir au menu précédent",
+                        ]
         result_choice = int(self.view.show_menu(choices=text_choices))
-
         match result_choice:
             case 1:
                 self.view.show_tournaments_list(self.tournament_manager.tournaments)
             case 2:
                 self.add_new_tournament()
+            case 3:
+                self.select_tournament()
             case _:
                 pass
 
     def add_new_tournament(self):
         tournament_info = self.view.prompt_for_new_tournament()
         self.tournament_manager.create_tournament(tournament_info)
+
+    def select_tournament(self):
+        result_choice = int(self.view.show_menu(choices=self.tournament_manager.tournaments))
+        print(self.tournament_manager.tournaments[result_choice-1])
 
     def run(self):
         text_choices = ["Gestion des joueurs", "Gestion des tournois", "Quitter l'application"]
