@@ -22,7 +22,7 @@ class PlayerManager:
 
         players = []
         for e in json_data:
-            players.append(Player(**e))
+            players.append(Player.from_dict(e))
         self._players = players
 
     def save_players(self):
@@ -88,7 +88,7 @@ class TournamentManager:
                 json_data = json.load(file)
 
             for e in json_data:
-                tournaments.append(Tournament(**e))
+                tournaments.append(Tournament.from_dict(e, player_manager=PlayerManager()))
         else:
             print("Pas encore de fichier de sauvegarde pour les tournois")
 
