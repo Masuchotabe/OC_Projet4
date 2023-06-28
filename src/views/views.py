@@ -58,9 +58,27 @@ class MainView:
 
     def show_players_list(self, players):
         for player in players:
-            print(player)
+            print(f"{player} - {player.national_chess_identifier}")
 
     def show_tournaments_list(self, tournaments):
         for tournament in tournaments:
             print(tournament)
 
+    def prompt_for_player_id(self, player_list):
+        """
+        Retourne l'id ( national chess identifier) d'un joueur parmis la liste.
+
+
+
+        Par défaut, l'id du premier joueur de la liste.
+        :param player_list: liste des joueurs sélectionnable
+        :return: un ID de joueur
+        """
+        print("Liste des joueurs : ")
+        self.show_players_list(player_list)
+        first_player_id = player_list[0].national_chess_identifier
+        player_id = input(f"Renseigner l'identifiant national d’échecs du joueur :[{first_player_id}]")
+        if player_id:
+            return player_id
+        else:
+            return first_player_id

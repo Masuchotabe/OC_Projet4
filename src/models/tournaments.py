@@ -78,7 +78,7 @@ class Tournament:
     @property
     def matches(self):
         """
-        Propriété permettant de récuperer tous les matchs du tournois
+        Propriété permettant de récuperer tous les matchs du tournoi
         :return: all_matches [List]
         """
         all_matches = []
@@ -86,6 +86,17 @@ class Tournament:
             if round.matches:
                 all_matches.append(round.matches)
         return all_matches
+
+    def is_started(self):
+        """
+        Permet de savoir si un tournoi est commencé.
+        :return: True ou False
+        """
+        if len(self.players) > 0 and len(self.rounds) > 0 and self.actual_round != 0:
+            return True
+        else:
+            return False
+
 
     """
     TODO : 
