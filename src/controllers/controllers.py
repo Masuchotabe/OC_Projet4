@@ -1,6 +1,8 @@
+import random
 
 from src.dabatase import PlayerManager, TournamentManager
 from src.views import MainView
+from src.models import Match, Round
 
 
 class MainController:
@@ -88,6 +90,28 @@ class MainController:
     def add_new_tournament(self):
         tournament_info = self.view.prompt_for_new_tournament()
         self.tournament_manager.create_tournament(tournament_info)
+
+    def start_tournament(self):
+        if self.selected_tournament:
+            if self.selected_tournament.actual_round == 0:
+                if (len(self.selected_tournament.players) >= 4) and ((len(self.selected_tournament.players) % 2) == 0):
+                    matches = self.get_random_matches()
+                    new_round = Round("Tour n°1", matches)
+                    self.selected_tournament.actual_round = 1
+                    self.selected_tournament.start()
+                    self.selected_tournament.rounds.append(new_round)
+                    self.tournament_manager.save_tournaments()
+                else:
+                    self.view.show_error_message("Le nombre de joueur du tournoi doit être pair et supérieur à 4.")
+            else:
+                self.view.show_error_message("Le tournois est déjà commencé. ")
+        else:
+            self.select_tournament()
+
+    def get_random_matches(self):
+        players_list = self.selected_tournament.players
+        random.shuffle(players_list)
+        return [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
 
     def select_tournament(self):
         result_choice = int(self.view.show_menu(choices=self.tournament_manager.tournaments))

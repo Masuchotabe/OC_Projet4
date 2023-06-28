@@ -14,8 +14,8 @@ class Round:
     def to_dict(self):
         return {
             "name": self.name,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
+            "start_date": self.start_date.strftime('%Y-%m-%d %H:%M:%S'),
+            "end_date": self.end_date.strftime('%Y-%m-%d %H:%M:%S') if self.end_date else None,
             "matches": [match.to_dict() for match in self.matches],
         }
 
@@ -23,7 +23,7 @@ class Round:
     def from_dict(cls, obj_dict, player_manager):
         return cls(
             name=obj_dict['name'],
-            start_date=obj_dict['start_date'],
-            end_date=obj_dict['end_date'],
+            start_date=datetime.strptime(obj_dict['start_date'], '%Y-%m-%d %H:%M:%S'),
+            end_date=datetime.strptime(obj_dict['end_date'], '%Y-%m-%d %H:%M:%S') if obj_dict['end_date'] else None,
             matches=[Match.from_dict(match_dict, player_manager) for match_dict in obj_dict['matches']],
         )

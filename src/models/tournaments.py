@@ -61,20 +61,6 @@ class Tournament:
             players_scores=obj_dict['players_scores'],
         )
 
-    def start_round(self):
-        """
-        Fonction permettant de commencer un nouveau round. Les matchs sont créées selon des conditions:
-        :return:
-        """
-        if len(self.rounds) > 0:  # On classe
-            pass
-        else:  # on mélange les joueurs
-            players_list = self.players
-            random.shuffle(players_list)
-            new_matches = [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
-
-        self.rounds.append(Round(f"Round {self.actual_round+1}", new_matches))
-
     @property
     def matches(self):
         """
