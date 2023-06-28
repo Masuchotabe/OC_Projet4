@@ -77,7 +77,7 @@ class MainController:
                         if not self.selected_tournament.is_started():
                             self.start_tournament()
                         elif not self.selected_tournament.is_finished():
-                            pass
+                            self.manage_rounds()
                         else:
                             self.view.show_error_message("Le tournois est déjà terminé.")
                     case 4:
@@ -104,7 +104,7 @@ class MainController:
                 else:
                     self.view.show_error_message("Le nombre de joueur du tournoi doit être pair et supérieur à 4.")
             else:
-                self.view.show_error_message("Le tournois est déjà commencé. ")
+                self.view.show_error_message("Le tournoi est déjà commencé. ")
         else:
             self.select_tournament()
 
@@ -112,6 +112,54 @@ class MainController:
         players_list = self.selected_tournament.players
         random.shuffle(players_list)
         return [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
+
+    def manage_rounds(self):
+
+        x_continue = True
+        while x_continue:
+            self.view.show_tournament(self.selected_tournament)
+            text_choices = ["Voir les matchs d'un tour",
+                            "Renseigner le résultat des matchs du tour actuel",
+                            "Revenir au menu précédent",
+                            ]
+            result_choice = int(self.view.show_menu(choices=text_choices))
+            match result_choice:
+                case 1:
+                    self.check_round_matches()
+                case 2:
+                    self.manage_actual_round()
+                case 3:
+                    x_continue = False
+                case _:
+                    pass
+
+    def manage_actual_round(self):
+        actual_round = self.selected_tournament.get_actual_round()
+        self.view.show_round(actual_round)
+        for match in actual_round.matches:
+            if not (match.score_1 and match.score_2):
+                message = "Veuillez choisir le résultat du match : "
+                text_choices = [f"{match.player_1} a gagné",
+                                f"{match.player_2} a gagné",
+                                "Match nul",
+                                "Retour"
+                                ]
+                result_choice = int(self.view.show_menu(message=message, choices=text_choices))
+                match result_choice:
+                    case 1:
+                        match.score_1 = 1.0
+                        match.score_2 = 0.0
+                    case 2:
+                        match.score_1 = 0.0
+                        match.score_2 = 1.0
+                    case 3:
+                        match.score_1 = 0.5
+                        match.score_2 = 0.5
+                    case _:
+                        pass
+            self.tournament_manager.save_tournaments()
+        self.selected_tournament.update_players_score()
+        self.tournament_manager.save_tournaments()
 
     def select_tournament(self):
         result_choice = int(self.view.show_menu(choices=self.tournament_manager.tournaments))

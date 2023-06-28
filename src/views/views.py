@@ -10,7 +10,7 @@ class MainView:
         #############################################
         """)
 
-    def show_menu(self, choices):
+    def show_menu(self, choices, message = None):
         """
         Affiche un menu à l'utilisateur et retourne le choix
         :param choices:
@@ -21,7 +21,10 @@ class MainView:
 
             for index, choice in enumerate(choices, start=1):
                 print(f"{index} - {choice}")
-            user_input = input("Veuillez choisir un menu : ")
+            if message:
+                user_input = input(message)
+            else:
+                user_input = input("Veuillez choisir un menu : ")
             if user_input.isnumeric():
                 if 0 < int(user_input) <= len(choices):
                     return int(user_input)
@@ -64,12 +67,22 @@ class MainView:
         for tournament in tournaments:
             print(tournament)
 
+    def show_tournament(self, tournament):
+        print(f"Tournois {tournament.name}")
+        for round in tournament.rounds:
+            if round.round_number != tournament.actual_round_number:
+                print(f"{round.name}")
+            else:
+                print(f"{round.name} - Round actuel")
+
+    def show_round(self, round):
+        print(round.name)
+        for match in round.matches:
+            print(match)
+
     def prompt_for_player_id(self, player_list):
         """
         Retourne l'id ( national chess identifier) d'un joueur parmis la liste.
-
-
-
         Par défaut, l'id du premier joueur de la liste.
         :param player_list: liste des joueurs sélectionnable
         :return: un ID de joueur

@@ -11,10 +11,10 @@ class Match:
         self.score_2 = score_2
 
     def __repr__(self):
-        return (
-            [self.player_1, self.score_1],
-            [self.player_2, self.score_2]
-        )
+        if (self.score_1 is not None) and (self.score_2 is not None):
+            return f"{self.player_1} - {self.score_1} | {self.player_2} - {self.score_2}"
+        else:
+            return f"{self.player_1} | {self.player_2}"
 
     def to_dict(self):
         return {
