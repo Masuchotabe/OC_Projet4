@@ -98,7 +98,6 @@ class MainController:
                     matches = self.get_random_matches()
                     new_round = Round("Tour n°1", matches)
                     self.selected_tournament.actual_round = 1
-                    self.selected_tournament.start()
                     self.selected_tournament.rounds.append(new_round)
                     self.tournament_manager.save_tournaments()
                 else:
