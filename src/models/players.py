@@ -12,6 +12,9 @@ class Player:
     def __repr__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def __eq__(self, other):
+        return self.national_chess_identifier == other.national_chess_identifier
+
     def to_dict(self):
         return self.__dict__
 

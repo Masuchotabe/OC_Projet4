@@ -16,6 +16,14 @@ class Match:
         else:
             return f"{self.player_1} | {self.player_2}"
 
+    def __eq__(self, other):
+        if isinstance(other, Match):
+            other_player_id = [other.player_1.national_chess_identifier, other.player_2.national_chess_identifier]
+            my_player_id = [self.player_1.national_chess_identifier, self.player_2.national_chess_identifier]
+            return sorted(other_player_id) == sorted(my_player_id)
+
+        return False
+
     def to_dict(self):
         return {
             "player_1": self.player_1.national_chess_identifier,

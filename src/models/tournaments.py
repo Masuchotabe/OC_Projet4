@@ -103,6 +103,16 @@ class Tournament:
         for r in self.rounds:
             if r.round_number == self.actual_round_number:
                 return r
+        return None
+
+    def get_ordered_player_list(self):
+        ordered_player_rank = sorted(self.players_scores.items(), key=lambda item: (-item[1], item[0]))
+        ordered_player_list = []
+        for player_id, score in ordered_player_rank:
+            for player in self.players:
+                if player.national_chess_identifier == player_id:
+                    ordered_player_list.append(player)
+        return ordered_player_list
 
     def init_players_score(self):
         self.players_scores = {player.national_chess_identifier: 0.0 for player in self.players}

@@ -30,3 +30,10 @@ class Round:
             end_date=datetime.strptime(obj_dict['end_date'], '%Y-%m-%d %H:%M:%S') if obj_dict['end_date'] else None,
             matches=[Match.from_dict(match_dict, player_manager) for match_dict in obj_dict['matches']],
         )
+
+    def is_finished(self):
+        """
+        Permet de savoir si le round est fini
+        :return: True si end_date est renseigné, sinon false
+        """
+        return True if self.end_date else False

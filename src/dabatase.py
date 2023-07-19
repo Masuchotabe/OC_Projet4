@@ -1,14 +1,14 @@
-import os.path
+import os
 from typing import List
 import json
-from models import Player, Tournament
+from src.models import Player, Tournament
 
 
 class PlayerManager:
     """ Permet de gérer la sauvegarde et la liste de tous les joueurs"""
 
     def __init__(self, file_path: str = 'data/players.json'):
-        self.file_path = file_path
+        self.file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), file_path)
         self._players = []
         self.load_players()
 
@@ -72,7 +72,7 @@ class TournamentManager:
     """ Permet de gérer la sauvegarde et la liste de tous les tournois"""
 
     def __init__(self, file_path: str = 'data/tournaments.json'):
-        self.file_path = file_path
+        self.file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), file_path)
         self._tournaments = []
         self.load_tournaments()
 
