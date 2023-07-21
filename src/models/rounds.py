@@ -36,4 +36,17 @@ class Round:
         Permet de savoir si le round est fini
         :return: True si end_date est renseigné, sinon false
         """
-        return True if self.end_date else False
+        return True if self.end_date and self.are_all_match_results_complete() else False
+
+    def are_all_match_results_complete(self):
+        """
+        Permet de vérifier que tous les matchs ont bien un score de renseigné
+        :return: True si tout les matchs ont un résultat
+        """
+        return all([match.has_result() for match in self.matches])
+
+    def finish(self):
+        """
+        Cloture le Round
+        """
+        self.end_date = datetime.now()

@@ -89,9 +89,9 @@ class MainController:
                     pass
 
     def manage_tournament(self):
-        if not (self.selected_tournament.is_started or self.selected_tournament.is_finished):
+        if not (self.selected_tournament.is_started() or self.selected_tournament.is_finished()):
             self.manage_not_start_tournament()
-        elif self.selected_tournament.is_finished:
+        elif self.selected_tournament.is_finished():
             self.manage_finished_tournament()  # todo menu tournoi terminé
         else:
             self.manage_in_progress_tournament()
@@ -124,7 +124,7 @@ class MainController:
             text_choices = [
                 "Voir les rounds",
                 f"Renseigner les résultats : {actual_round.name}" if not actual_round.is_finished()
-                else "Générer le tour suivant",
+                else "Démarrer le tour suivant",
                 "Classement des joueurs",
                 "Revenir au menu précédent",
                 "Revenir à l'accueil",
@@ -183,7 +183,7 @@ class MainController:
         actual_round = self.selected_tournament.get_actual_round()
         self.view.show_round(actual_round)
         for match in actual_round.matches:
-            if not (match.score_1 and match.score_2):
+            if not match.has_result():
                 message = "Veuillez choisir le résultat du match : "
                 text_choices = [f"{match.player_1} a gagné",
                                 f"{match.player_2} a gagné",
@@ -204,6 +204,8 @@ class MainController:
                     case _:
                         pass
             self.tournament_manager.save_tournaments()
+        if actual_round.are_all_match_results_complete():
+            actual_round.finish()
         self.selected_tournament.update_players_score()
         self.tournament_manager.save_tournaments()
 
@@ -239,7 +241,7 @@ class MainController:
         """
         Permet de créer le round suivant du tournoi
         """
-        if not self.selected_tournament.is_finished:
+        if not self.selected_tournament.is_finished():
             new_matches = self.get_new_matches()
             actual_round = self.selected_tournament.get_actual_round()
             if actual_round:
@@ -248,7 +250,9 @@ class MainController:
                 next_round_number = 1
             round_name = f"Tour n°{next_round_number}"
             new_round = Round(name=round_name, round_number=next_round_number, matches=new_matches)
+
             self.selected_tournament.rounds.append(new_round)
+            self.selected_tournament.actual_round_number = next_round_number
             self.tournament_manager.save_tournaments()
         else:
             self.view.show_error_message("Le tournoi est déjà terminé")
@@ -290,9 +294,16 @@ class MainController:
 
 
 if __name__ == '__main__':
+    from tabulate import tabulate
 
     mc = MainController()
     mc.selected_tournament = mc.tournament_manager.tournaments[0]
-    new_match = mc.get_new_matches()
-    print(new_match)
+    print(mc.selected_tournament)
+    players = mc.player_manager.players
+    print(players)
+    prop_list = ["first_name", "last_name", "birth_date", "national_chess_identifier"]
+    headers = ["Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs"]
+    mc.view.print_list_of_object(players, prop_list)
+
+    # print(tabulate(data, headers, ))
 

@@ -90,7 +90,7 @@ class Tournament:
         round actuel est le dernier.
         :return: True ou False
         """
-        if all([r.end_date for r in self.rounds]) and (self.actual_round_number == self.number_of_rounds):
+        if all([r.is_finished() for r in self.rounds]) and (self.actual_round_number == self.number_of_rounds):
             return True
         else:
             return False

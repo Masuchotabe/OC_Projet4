@@ -40,3 +40,10 @@ class Match:
             score_1=obj_dict['score_1'],
             score_2=obj_dict['score_2'],
         )
+
+    def has_result(self):
+        """
+        Permet de savoir si le match à un résultat de renseigné
+        :return: True si le score est renseigné sinon False
+        """
+        return self.score_1 is not None and self.score_2 is not None
