@@ -17,7 +17,6 @@ class MainView:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def show_menu(self, choices, message = None):
-        self.clear_console()
         """
         Affiche un menu à l'utilisateur et retourne le choix
         :param choices:
@@ -129,11 +128,7 @@ class MainView:
             data_to_print.append(player_info)
 
         headers = headers or property_list
-        print(tabulate(data_to_print, headers))
-
-
-
-
+        print(tabulate(data_to_print, headers, stralign='center', numalign='center'))
 
     def show_error_message(self, error_message):
         """

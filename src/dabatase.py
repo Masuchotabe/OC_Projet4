@@ -17,12 +17,18 @@ class PlayerManager:
             Récupère tous les joueurs depuis le fichier json "players.json"
             :return: list[Player]
         """
-        with open(str(self.file_path), 'r') as file:
-            json_data = json.load(file)
-
         players = []
-        for e in json_data:
-            players.append(Player.from_dict(e))
+
+        if os.path.exists(self.file_path):
+            with open(str(self.file_path), 'r') as file:
+                json_data = json.load(file)
+
+            for e in json_data:
+                players.append(Player.from_dict(e))
+        else:
+            parent_dir_path = os.path.dirname(self.file_path)
+            if not os.path.exists(parent_dir_path):
+                os.makedirs(parent_dir_path)
         self._players = players
 
     def save_players(self):
@@ -34,7 +40,7 @@ class PlayerManager:
         for player in self._players:
             json_data.append(player.to_dict())
 
-        with open(str(self.file_path), 'w') as file:
+        with open(str(self.file_path), 'w+') as file:
             json.dump(json_data, file, indent=2)
 
     @property
@@ -90,7 +96,9 @@ class TournamentManager:
             for e in json_data:
                 tournaments.append(Tournament.from_dict(e, player_manager=PlayerManager()))
         else:
-            print("Pas encore de fichier de sauvegarde pour les tournois")
+            parent_dir_path = os.path.dirname(self.file_path)
+            if not os.path.exists(parent_dir_path):
+                os.makedirs(parent_dir_path)
 
         self._tournaments = tournaments
 
@@ -103,7 +111,7 @@ class TournamentManager:
         for tournament in self._tournaments:
             json_data.append(tournament.to_dict())
 
-        with open(str(self.file_path), 'w') as file:
+        with open(str(self.file_path), 'w+') as file:
             json.dump(json_data, file, indent=2)
 
     @property
