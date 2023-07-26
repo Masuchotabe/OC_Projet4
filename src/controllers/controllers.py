@@ -5,6 +5,8 @@ from src.dabatase import PlayerManager, TournamentManager
 from src.views import MainView
 from src.models import Match, Round
 
+from src.validators import validate_date_from_str, validate_national_chess_identifier
+
 
 class MainController:
     """
@@ -251,8 +253,23 @@ class MainController:
             self.view.show_error_message("Le tournoi est déjà commencé.")
 
     def add_new_player(self):
-        player_info = self.view.prompt_for_new_player()
-        self.player_manager.create_player(player_info)
+        valid_result = False
+        while not valid_result:
+            player_data = self.view.prompt_for_new_player()
+            self.validate_player_data(player_data)
+        self.player_manager.create_player(player_data)
+
+    def validate_player_data(self, player_data):
+        if isinstance(player_data, dict):
+            if not validate_national_chess_identifier(player_data["national_chess_identifier"]):
+                self.view.show_error_message(
+                    "Le numéro national d'échec doit être de la forme \"AAXXXXX\" ( A = Lettre, X = Chiffre )"
+                )
+                return False
+            #TODO : Continuer validation
+            return True
+
+
 
     def add_player_to_tournament(self):
         if not self.selected_tournament.is_started():
