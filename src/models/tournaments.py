@@ -15,7 +15,7 @@ class Tournament:
         self.start_date = start_date
         self.end_date = end_date
 
-        self.number_of_rounds = number_of_rounds
+        self.number_of_rounds = int(number_of_rounds)
         self.actual_round_number = actual_round_number
         self.rounds = rounds or []
 

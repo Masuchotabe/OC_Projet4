@@ -2,6 +2,7 @@ import os
 
 from tabulate import tabulate
 
+
 class MainView:
     """
     Classe définissant la vue de base

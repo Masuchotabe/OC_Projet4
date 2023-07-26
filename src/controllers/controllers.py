@@ -242,13 +242,13 @@ class MainController:
         self.tournament_manager.create_tournament(tournament_info)
 
     def start_tournament(self):
-        if self.selected_tournament.actual_round == 0:
+        if self.selected_tournament.actual_round_number == 0:
             if (len(self.selected_tournament.players) >= 4) and ((len(self.selected_tournament.players) % 2) == 0):
                 self.generate_next_round()
             else:
                 self.view.show_error_message("Le nombre de joueur du tournoi doit être pair et supérieur à 4.")
         else:
-            self.view.show_error_message("Le tournoi est déjà commencé. ")
+            self.view.show_error_message("Le tournoi est déjà commencé.")
 
     def add_new_player(self):
         player_info = self.view.prompt_for_new_player()
