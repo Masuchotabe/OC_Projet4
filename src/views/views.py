@@ -89,9 +89,18 @@ class MainView:
             else:
                 print(f"{round.name} - Round actuel")
 
+    def show_round_list(self, round_list):
+        """
+        Affiche la liste des rounds
+        :param round_list:
+        """
+        property_list = ["name", "start_date", "end_date"]
+        headers = ["Nom", "Date de début", "Date de fin"]
+        self.print_list_of_object(round_list, property_list, headers)
+
     def show_round(self, round):
         self.clear_console()
-        print(round.name)
+        print(f"\n{round.name}")
         for match in round.matches:
             print(match)
 

@@ -12,6 +12,9 @@ class Round:
         self.end_date = end_date
         self.matches = matches
 
+    def __repr__(self):
+        return f"{self.name}"
+
     def to_dict(self):
         return {
             "name": self.name,

@@ -175,7 +175,6 @@ class MainController:
                 pass
 
     def manage_rounds(self):
-
         x_continue = True
         while x_continue and not self.go_home:
             self.view.show_tournament(self.selected_tournament)
@@ -190,7 +189,7 @@ class MainController:
             result_choice = int(self.view.show_menu(choices=text_choices))
             match result_choice:
                 case 1:
-                    pass  # Todo : afficher les matchs d'un tour
+                    self.view_round()
                 case 2:
                     if not actual_round.is_finished():
                         self.manage_actual_round()
@@ -202,6 +201,11 @@ class MainController:
                     self.go_home = True
                 case _:
                     pass
+
+    def view_round(self):
+        message = "Veuillez choisir un tour dans la liste par son numéro : "
+        result_choice = int(self.view.show_menu(choices=self.selected_tournament.rounds, message=message))
+        self.view.show_round(self.selected_tournament.rounds[result_choice - 1])
 
     def manage_actual_round(self):
         actual_round = self.selected_tournament.get_actual_round()
