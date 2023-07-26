@@ -89,66 +89,90 @@ class MainController:
                     pass
 
     def manage_tournament(self):
-        if not (self.selected_tournament.is_started() or self.selected_tournament.is_finished()):
-            self.manage_not_start_tournament()
-        elif self.selected_tournament.is_finished():
-            self.manage_finished_tournament()  # todo menu tournoi terminé
-        else:
-            self.manage_in_progress_tournament()
+        x_continue = True
+        while x_continue and not self.go_home:
+            if not (self.selected_tournament.is_started() or self.selected_tournament.is_finished()):
+                x_continue = self.manage_not_start_tournament() or True
+            elif self.selected_tournament.is_finished():
+                x_continue = self.manage_finished_tournament() or True
+            else:
+                x_continue = self.manage_in_progress_tournament() or True
 
     def manage_not_start_tournament(self):
-        x_continue = True
-        while x_continue and not self.go_home:
-            text_choices = ["Ajouter un joueur",
-                            "Démarrer",
-                            "Revenir au menu précédent",
-                            "Revenir à l'accueil",
-                            ]
-            result_choice = int(self.view.show_menu(choices=text_choices))
-            match result_choice:
-                case 1:
-                    self.add_player_to_tournament()
-                case 2:
-                    self.start_tournament()
-                case 3:
-                    x_continue = False
-                case 4:
-                    self.go_home = True
-                case _:
-                    pass
+        """
+
+        :return:
+        """
+        text_choices = ["Ajouter un joueur",
+                        "Démarrer",
+                        "Revenir au menu précédent",
+                        "Revenir à l'accueil",
+                        ]
+        result_choice = int(self.view.show_menu(choices=text_choices))
+        match result_choice:
+            case 1:
+                self.add_player_to_tournament()
+            case 2:
+                self.start_tournament()
+            case 3:
+                return False
+            case 4:
+                self.go_home = True
+            case _:
+                pass
 
     def manage_in_progress_tournament(self):
-        x_continue = True
-        while x_continue and not self.go_home:
-            actual_round = self.selected_tournament.get_actual_round()
-            text_choices = [
-                "Voir les rounds",
-                f"Renseigner les résultats : {actual_round.name}" if not actual_round.is_finished()
-                else "Démarrer le tour suivant",
-                "Classement des joueurs",
-                "Revenir au menu précédent",
-                "Revenir à l'accueil",
-            ]
-            result_choice = int(self.view.show_menu(choices=text_choices))
-            match result_choice:
-                case 1:
-                    self.manage_rounds()
-                case 2:
-                    if not actual_round.is_finished():
-                        self.manage_actual_round()
-                    else:
-                        self.generate_next_round()
-                case 3:
-                    pass  # todo : Afficher classement des joueurs
-                case 4:
-                    x_continue = False
-                case 5:
-                    self.go_home = True
-                case _:
-                    pass
+        actual_round = self.selected_tournament.get_actual_round()
+        text_choices = [
+            "Voir les rounds",
+            f"Renseigner les résultats : {actual_round.name}" if not actual_round.is_finished()
+            else "Démarrer le tour suivant",
+            "Classement des joueurs",
+            "Revenir au menu précédent",
+            "Revenir à l'accueil",
+        ]
+        result_choice = int(self.view.show_menu(choices=text_choices))
+        match result_choice:
+            case 1:
+                self.manage_rounds()
+            case 2:
+                if not actual_round.is_finished():
+                    self.manage_actual_round()
+                else:
+                    self.generate_next_round()
+            case 3:
+                self.view.show_players_list(self.selected_tournament.get_ordered_player_list, sort_by_last_name=False)
+            case 4:
+                return False
+            case 5:
+                self.go_home = True
+            case _:
+                pass
 
     def manage_finished_tournament(self):
-        pass
+        text_choices = ["Voir la liste des joueurs",
+                        "Classement des joueurs",
+                        "Voir la liste des tours",
+                        "Voir les matchs d'un tour",
+                        "Revenir au menu précédent",
+                        "Revenir à l'accueil",
+                        ]
+        result_choice = int(self.view.show_menu(choices=text_choices))
+        match result_choice:
+            case 1:
+                self.view.show_players_list(self.selected_tournament.players)
+            case 2:
+                self.view.show_players_list(self.selected_tournament.get_ordered_player_list, sort_by_last_name=False)
+            case 3:
+                self.view.show_round_list(self.selected_tournament.rounds)
+            case 4:
+                self.view_round()
+            case 5:
+                return False
+            case 6:
+                self.go_home = True
+            case _:
+                pass
 
     def manage_rounds(self):
 
