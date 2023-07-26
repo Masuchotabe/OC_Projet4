@@ -68,8 +68,10 @@ class MainView:
                 'end_date': end_date
                 }
 
-    def show_players_list(self, players):
+    def show_players_list(self, players, sort_by_last_name=True):
         self.clear_console()
+        if sort_by_last_name:
+            players.sort(key=lambda player: player.last_name)
         property_list = ["first_name", "last_name", "birth_date", "national_chess_identifier"]
         headers = ["Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs"]
         self.print_list_of_object(players, property_list, headers)
@@ -123,11 +125,12 @@ class MainView:
         else:
             return first_player_id
 
-    def print_list_of_object(self, object_list, property_list, headers = None):
+    def print_list_of_object(self, object_list, property_list, headers=None):
         """
         Permet de print en tableau une liste d'élément avec les property contenu dans property_list
         :param object_list: liste d'objets à afficher
         :param property_list: liste de property à afficher (sert également de header au tableau)
+        :param headers: Surcharge les en-tetes du tableau
         """
         data_to_print = []
         for obj in object_list:
