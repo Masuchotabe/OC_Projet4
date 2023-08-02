@@ -240,8 +240,33 @@ class MainController:
         self.tournament_manager.save_tournaments()
 
     def add_new_tournament(self):
-        tournament_info = self.view.prompt_for_new_tournament()
-        self.tournament_manager.create_tournament(tournament_info)
+        """
+        Permet d'ajouter un nouveau tournoi et vérifie si les données sont valides
+        """
+        tournament_data = self.view.prompt_for_new_tournament()
+        if self.validate_tournament_data(tournament_data):
+            self.tournament_manager.create_tournament(tournament_data)
+        else:
+            self.view.show_error_message("La création a échouée. Veuillez réessayer.")
+
+    def validate_tournament_data(self, tournament_data):
+        data_valid = True
+        if isinstance(tournament_data, dict):
+            if isinstance(tournament_data['number_of_rounds'], int):
+                if not tournament_data['number_of_rounds'] > 0:
+                    self.view.show_error_message("Le nombre de tours doit être un entier supérieur à 0.")
+                    data_valid = False
+            elif isinstance(tournament_data['number_of_rounds'], str):
+                if not all(c.isdigit() for c in tournament_data['number_of_rounds']):
+                    self.view.show_error_message("Le nombre de tours doit être un entier positifs.")
+                    data_valid = False
+            if not (validate_date_from_str(tournament_data['start_date']) or validate_date_from_str('end_date')):
+                self.view.show_error_message("Les dates doivent être au format JJ/MM/AAAA.")
+                data_valid = False
+        else:
+            self.view.show_error_message("Le type de donnée attendu n'est pas respecté. Contacter le développeur. ")
+            data_valid = False
+        return data_valid
 
     def start_tournament(self):
         if self.selected_tournament.actual_round_number == 0:
@@ -253,23 +278,33 @@ class MainController:
             self.view.show_error_message("Le tournoi est déjà commencé.")
 
     def add_new_player(self):
-        valid_result = False
-        while not valid_result:
-            player_data = self.view.prompt_for_new_player()
-            self.validate_player_data(player_data)
-        self.player_manager.create_player(player_data)
+        player_data = self.view.prompt_for_new_player()
+        if self.validate_player_data(player_data):
+            self.player_manager.create_player(player_data)
+        else:
+            self.view.show_error_message("La création a échouée. Veuillez réessayer.")
 
     def validate_player_data(self, player_data):
+        data_valid = True
         if isinstance(player_data, dict):
+
+            if self.player_manager.get_player(player_data['national_chess_identifier']):
+                self.view.show_error_message(
+                    f"Le numéro national d'échec {player_data['national_chess_identifier']} est déjà utilisé sur"
+                    f" le joueur {self.player_manager.get_player(player_data['national_chess_identifier'])}."
+                )
             if not validate_national_chess_identifier(player_data["national_chess_identifier"]):
                 self.view.show_error_message(
-                    "Le numéro national d'échec doit être de la forme \"AAXXXXX\" ( A = Lettre, X = Chiffre )"
+                    "Le numéro national d'échec doit être de la forme \"AAXXXXX\" ( A = Lettre, X = Chiffre )."
                 )
-                return False
-            #TODO : Continuer validation
-            return True
+                data_valid = False
+            if not validate_date_from_str(player_data["birth_date"]):
+                self.view.show_error_message(
+                    "La date de naissance doit être au format JJ/MM/AAAA."
+                )
+                data_valid = False
 
-
+            return data_valid
 
     def add_player_to_tournament(self):
         if not self.selected_tournament.is_started():

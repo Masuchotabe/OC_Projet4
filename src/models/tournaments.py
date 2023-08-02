@@ -12,8 +12,15 @@ class Tournament:
         self.name = name
         self.description = description
         self.location = location
-        self.start_date = start_date
-        self.end_date = end_date
+        if isinstance(start_date, str):
+            self.start_date = datetime.strptime(start_date, '%d/%m/%Y').date()
+        else:
+            self.start_date = start_date
+
+        if isinstance(end_date, str):
+            self.end_date = datetime.strptime(end_date, '%d/%m/%Y').date()
+        else:
+            self.end_date = end_date
 
         self.number_of_rounds = int(number_of_rounds)
         self.actual_round_number = actual_round_number
@@ -32,8 +39,8 @@ class Tournament:
             'name': self.name,
             'description': self.description,
             'location': self.location,
-            'start_date': self.start_date,
-            'end_date': self.end_date,
+            "start_date": self.start_date.strftime('%Y-%m-%d') if self.start_date else None,
+            "end_date": self.end_date.strftime('%Y-%m-%d') if self.end_date else None,
 
             'number_of_rounds': self.number_of_rounds,
             'actual_round_number': self.actual_round_number,
@@ -50,8 +57,10 @@ class Tournament:
             name=obj_dict['name'],
             description=obj_dict['description'],
             location=obj_dict['location'],
-            start_date=obj_dict['start_date'],
-            end_date=obj_dict['end_date'],
+            start_date=datetime.strptime(obj_dict['start_date'], '%Y-%m-%d').date(),
+            end_date=(
+                datetime.strptime(obj_dict['end_date'], '%Y-%m-%d').date() if obj_dict['end_date'] else None
+            ),
             number_of_rounds=obj_dict['number_of_rounds'],
             actual_round_number=obj_dict['actual_round_number'],
             rounds=[Round.from_dict(round_dict, player_manager) for round_dict in obj_dict['rounds']],
