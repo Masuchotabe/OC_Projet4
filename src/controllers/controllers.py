@@ -283,10 +283,21 @@ class MainController:
         :return:
         """
         if self.selected_tournament.actual_round_number == 0:
-            if (len(self.selected_tournament.players) >= 4) and ((len(self.selected_tournament.players) % 2) == 0):
+            if self.selected_tournament.can_start():
                 self.generate_next_round()
             else:
-                self.view.show_error_message("Le nombre de joueur du tournoi doit être pair et supérieur à 4.")
+                if self.selected_tournament.number_of_rounds % 2 == 0:
+                    min_player_number = self.selected_tournament.number_of_rounds + 2
+                else:
+                    min_player_number = self.selected_tournament.number_of_rounds + 1
+
+                self.view.show_error_message(
+                    f"Le tournoi ne peut pas démarrer. Ces prérequis sont nécessaires : \n"
+                    f"\t - Le nombre de joueur doit être pair.\n"
+                    f"\t - Le nombre de tour doit être cohérent avec le nombre de joueur.\n" 
+                    f"Pour {self.selected_tournament.number_of_rounds} tours, il faut au minimum " 
+                    f"{min_player_number } joueurs. \n"
+                )
         else:
             self.view.show_error_message("Le tournoi est déjà commencé.")
 

@@ -80,6 +80,23 @@ class Tournament:
                 all_matches.extend(round.matches)
         return all_matches
 
+    def can_start(self):
+        """
+        Permet de vérifier qu'un tournoi différents prérequis pour démarrer :
+            - Nombre de joueurs pairs
+            - Le nombre de tours est cohérent avec le nombre de joueurs
+            pour qu'ils puissent jouer sans se rencontrer 2 fois.
+        :return: True si le tournoi respectent les conditions.
+        """
+        player_len = len(self.players)
+        if (player_len % 2 == 0) and player_len > 0:  # Nombre de joueurs pairs et >0
+            number_of_rounds = self.number_of_rounds
+            if number_of_rounds < player_len:  # on vérifie si le nombre de tours est inférieur au nombre de joueur.
+                return True
+        # Sinon on return false
+        return False
+
+
     def is_started(self):
         """
         Permet de savoir si un tournoi est commencé.
