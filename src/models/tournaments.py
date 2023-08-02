@@ -115,6 +115,10 @@ class Tournament:
         return None
 
     def get_ordered_player_list(self):
+        """
+        Permet d'obtenir la liste des joueurs ordonnée par leur nombre de points et ordre alphabétique
+        :return: List des players triés
+        """
         ordered_player_rank = sorted(self.players_scores.items(), key=lambda item: (-item[1], item[0]))
         ordered_player_list = []
         for player_id, score in ordered_player_rank:
@@ -122,6 +126,20 @@ class Tournament:
                 if player.national_chess_identifier == player_id:
                     ordered_player_list.append(player)
         return ordered_player_list
+
+    def get_ranked_player_list(self):
+        """
+        Génère une liste de dictionnaire contenant pour chaque dictionnaire le joueur, son score et son rang.
+        :return:
+        """
+        player_dict_list = []
+        for index, player in enumerate(self.get_ordered_player_list(), start=1):
+            player_dict = dict()
+            player_dict['rank'] = index
+            player_dict['score'] = self.players_scores[player.national_chess_identifier]
+            player_dict.update(player.to_dict())
+            player_dict_list.append(player_dict)
+        return player_dict_list
 
     def init_players_score(self):
         self.players_scores = {player.national_chess_identifier: 0.0 for player in self.players}

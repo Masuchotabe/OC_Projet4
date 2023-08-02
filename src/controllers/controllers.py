@@ -143,7 +143,8 @@ class MainController:
                 else:
                     self.generate_next_round()
             case 3:
-                self.view.show_players_list(self.selected_tournament.get_ordered_player_list, sort_by_last_name=False)
+                player_dict_list = self.selected_tournament.get_ranked_player_list()
+                self.view.show_players_score(player_dict_list, sort_by_last_name=False)
             case 4:
                 return False
             case 5:
@@ -164,7 +165,8 @@ class MainController:
             case 1:
                 self.view.show_players_list(self.selected_tournament.players)
             case 2:
-                self.view.show_players_list(self.selected_tournament.get_ordered_player_list, sort_by_last_name=False)
+                player_dict_list = self.selected_tournament.get_ranked_player_list()
+                self.view.show_players_score(player_dict_list, sort_by_last_name=False)
             case 3:
                 self.view.show_round_list(self.selected_tournament.rounds)
             case 4:
@@ -234,9 +236,13 @@ class MainController:
                     case _:
                         pass
             self.tournament_manager.save_tournaments()
-        if actual_round.are_all_match_results_complete():
-            actual_round.finish()
+
         self.selected_tournament.update_players_score()
+        if actual_round.are_all_match_results_complete():  # si tous les matchs sont complétés on termine le round
+            actual_round.finish()
+            player_dict_list = self.selected_tournament.get_ranked_player_list()  # et on affiche le classement
+            self.view.show_players_score(player_dict_list, sort_by_last_name=False)
+
         self.tournament_manager.save_tournaments()
 
     def add_new_tournament(self):

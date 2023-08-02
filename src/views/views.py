@@ -70,11 +70,21 @@ class MainView:
 
     def show_players_list(self, players, sort_by_last_name=True):
         self.clear_console()
-        if sort_by_last_name:
-            players.sort(key=lambda player: player.last_name)
+
         property_list = ["first_name", "last_name", "birth_date", "national_chess_identifier"]
         headers = ["Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs"]
+        if sort_by_last_name:
+            players.sort(key=lambda player: player.last_name.lower())
         self.print_list_of_object(players, property_list, headers)
+
+    def show_players_score(self, players_dict_list, sort_by_last_name=True):
+        self.clear_console()
+
+        property_list = ["rank", "first_name", "last_name", "birth_date", "national_chess_identifier", "score"]
+        headers = ["Rang", "Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs", "Score"]
+        if sort_by_last_name:
+            players_dict_list.sort(key=lambda player: player['last_name'])
+        self.print_list_of_dict(players_dict_list, property_list, headers)
 
     def show_tournaments_list(self, tournaments):
         self.clear_console()
@@ -134,13 +144,32 @@ class MainView:
         """
         data_to_print = []
         for obj in object_list:
-            player_info = []
+            object_info = []
             for prop in property_list:
                 if hasattr(obj, prop):
-                    player_info.append(getattr(obj, prop))
-            data_to_print.append(player_info)
+                    object_info.append(getattr(obj, prop))
+            data_to_print.append(object_info)
 
         headers = headers or property_list
+        print(tabulate(data_to_print, headers, stralign='center', numalign='center'))
+        print("######### FIN DU TABLEAU #########")
+
+    def print_list_of_dict(self, dict_list, key_list, headers=None):
+        """
+        Permet de print en tableau une liste de dictionnaire avec les clé contenu dans key_list
+        :param dict_list: liste de dictionnaire à afficher
+        :param key_list: liste de clé à afficher (sert également de header au tableau)
+        :param headers: Surcharge les en-tetes du tableau
+        """
+        data_to_print = []
+        for dictionnary in dict_list:
+            dictionnary_info = []
+            for key in key_list:
+                if key in dictionnary:
+                    dictionnary_info.append(dictionnary[key])
+            data_to_print.append(dictionnary_info)
+
+        headers = headers or key_list
         print(tabulate(data_to_print, headers, stralign='center', numalign='center'))
 
     def show_error_message(self, error_message):
