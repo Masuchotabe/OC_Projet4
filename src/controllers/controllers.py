@@ -212,6 +212,9 @@ class MainController:
         self.view.show_round(self.selected_tournament.rounds[result_choice - 1])
 
     def manage_actual_round(self):
+        """
+        Permet de completer les résultats des rounds
+        """
         actual_round = self.selected_tournament.get_actual_round()
         self.view.show_round(actual_round)
         for match in actual_round.matches:
@@ -275,6 +278,10 @@ class MainController:
         return data_valid
 
     def start_tournament(self):
+        """
+        Démarre le tournoi sélectionné si c'est possible.
+        :return:
+        """
         if self.selected_tournament.actual_round_number == 0:
             if (len(self.selected_tournament.players) >= 4) and ((len(self.selected_tournament.players) % 2) == 0):
                 self.generate_next_round()

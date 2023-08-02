@@ -25,13 +25,14 @@ class MainView:
         """
         valid_result = False
         while not valid_result:
-
+            if message:
+                print(message)
+            else:
+                print("Veuillez choisir un menu :")
             for index, choice in enumerate(choices, start=1):
                 print(f"{index} - {choice}")
-            if message:
-                user_input = input(message)
-            else:
-                user_input = input("Veuillez choisir un menu : ")
+            user_input = input("Votre choix : ")
+            print('#'*50)
             if user_input.isnumeric():
                 if 0 < int(user_input) <= len(choices):
                     return int(user_input)

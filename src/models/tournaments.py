@@ -1,12 +1,10 @@
-import random
 from datetime import datetime
-from typing import List
 
-from src.models import Round, Player, Match
+from src.models import Round
 
 
 class Tournament:
-    def __init__(self, identifier, name, location, start_date, players: List[Player]=None, end_date=None,
+    def __init__(self, identifier, name, location, start_date, players=None, end_date=None,
                  number_of_rounds=4, description=None, actual_round_number=0, players_scores=None, rounds=None):
         self.identifier = identifier
         self.name = name
@@ -142,6 +140,9 @@ class Tournament:
         return player_dict_list
 
     def init_players_score(self):
+        """
+        Initialise les scores des joueurs à 0
+        """
         self.players_scores = {player.national_chess_identifier: 0.0 for player in self.players}
 
     def update_players_score(self):
@@ -153,13 +154,3 @@ class Tournament:
             if (match.score_1 is not None) and (match.score_2 is not None):
                 self.players_scores[match.player_1.national_chess_identifier] += match.score_1
                 self.players_scores[match.player_2.national_chess_identifier] += match.score_2
-
-
-    """
-    TODO : 
-        - démarrer un nouveau round : 
-            - Methode get_match if rounds 
-            - si pas pas de rounds, randomize la liste des joueurs 
-            - si rounds, alors on liste les joueurs par classement 
-                - on génère les paires 
-    """

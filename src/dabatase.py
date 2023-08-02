@@ -51,7 +51,7 @@ class PlayerManager:
         """
         return self._players
 
-    def get_player(self, national_chess_identifier: str) -> Player:
+    def get_player(self, national_chess_identifier):
         """
         Permet de récupérer un joueur par son identifiant national d'échec
         :param national_chess_identifier: Identifiant national d'échec
@@ -61,10 +61,10 @@ class PlayerManager:
             if player.national_chess_identifier == national_chess_identifier:
                 return player
 
-    def add_player(self, player) -> None:
+    def add_player(self, player):
         """
         Ajoute un joueur
-        :param player:
+        :param player: objet player
         """
         self._players.append(player)
         self.save_players()
