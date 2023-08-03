@@ -96,7 +96,7 @@ class MainView:
     def show_tournament(self, tournament):
         self.clear_console()
 
-        print(f"Tournois {tournament.name} du {tournament.start_date} au {tournament.end_date}")
+        print(f"Tournoi {tournament.name} du {tournament.start_date} au {tournament.end_date}")
         for round in tournament.rounds:
             if round.round_number != tournament.actual_round_number:
                 print(f"{round.name}")
@@ -112,10 +112,10 @@ class MainView:
         headers = ["Nom", "Date de début", "Date de fin"]
         self.print_list_of_object(round_list, property_list, headers)
 
-    def show_round(self, round):
+    def show_round(self, tournament_round):
         self.clear_console()
-        print(f"\n{round.name}")
-        for match in round.matches:
+        print(f"\n{tournament_round.name}")
+        for match in tournament_round.matches:
             print(match)
 
     def prompt_for_player_id(self, player_list):

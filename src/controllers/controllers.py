@@ -94,11 +94,11 @@ class MainController:
         x_continue = True
         while x_continue and not self.go_home:
             if not (self.selected_tournament.is_started() or self.selected_tournament.is_finished()):
-                x_continue = self.manage_not_start_tournament() or True
+                x_continue = self.manage_not_start_tournament()
             elif self.selected_tournament.is_finished():
-                x_continue = self.manage_finished_tournament() or True
+                x_continue = self.manage_finished_tournament()
             else:
-                x_continue = self.manage_in_progress_tournament() or True
+                x_continue = self.manage_in_progress_tournament()
 
     def manage_not_start_tournament(self):
         """
@@ -122,6 +122,7 @@ class MainController:
                 self.go_home = True
             case _:
                 pass
+        return True
 
     def manage_in_progress_tournament(self):
         actual_round = self.selected_tournament.get_actual_round()
@@ -151,6 +152,7 @@ class MainController:
                 self.go_home = True
             case _:
                 pass
+        return True
 
     def manage_finished_tournament(self):
         text_choices = ["Voir la liste des joueurs",
@@ -177,6 +179,7 @@ class MainController:
                 self.go_home = True
             case _:
                 pass
+        return True
 
     def manage_rounds(self):
         x_continue = True
@@ -362,7 +365,7 @@ class MainController:
             self.view.show_error_message("Le tournoi est déjà terminé")
 
     def get_new_matches(self):
-        if self.selected_tournament.is_started:
+        if self.selected_tournament.is_started():
             new_matches = self.generate_ordered_match()
         else:
             new_matches = self.generate_random_match()
