@@ -116,9 +116,9 @@ class MainView:
         :return:
         """
         self.clear_console()
-        property_list = ["name", "location", "start_date", "end_date", "description"]
-        headers = ["Nom", "Lieu", "Date de début", "Date de fin", "Description"]
-        self._(tournaments, property_list, headers)
+        property_list = ["identifier", "name", "location", "start_date", "end_date", "description"]
+        headers = ["ID", "Nom", "Lieu", "Date de début", "Date de fin", "Description"]
+        self._print_list_of_object(tournaments, property_list, headers)
 
     def show_tournament(self, tournament):
         """
@@ -137,23 +137,25 @@ class MainView:
         Affiche la liste des rounds
         :param round_list: liste des rounds
         """
+        print("-- Liste des tours --\n")
         property_list = ["name", "start_date", "end_date"]
         headers = ["Nom", "Date de début", "Date de fin"]
         self._print_list_of_object(round_list, property_list, headers)
 
     def show_round(self, tournament_round):
+        """
+        Affiche un round du tournoi
+        :param tournament_round: Round à afficher
+        """
         self.clear_console()
-        print(f"\n{tournament_round.name}")
+        print(f"\nAffichage {tournament_round.name}")
         property_list = ["player_1", "score_1", "player_2", "score_2"]
         headers = ["Joueur 1", "Score 1", "Joueur 2", "Score 2"]
         self._print_list_of_object(tournament_round.matches, property_list, headers)
-        # for match in tournament_round.matches:
-        #
-        #     print(match)
 
     def prompt_for_player_id(self, player_list):
         """
-        Retourne l'id ( national chess identifier) d'un joueur parmis la liste.
+        Retourne l'id ( national chess identifier) d'un joueur parmi la liste.
         Par défaut, l'id du premier joueur de la liste.
         :param player_list: liste des joueurs sélectionnable
         :return: un ID de joueur
@@ -186,7 +188,7 @@ class MainView:
 
         headers = headers or property_list
         print(tabulate(data_to_print, headers, stralign='center', numalign='center'))
-        print("######### FIN DU TABLEAU #########")
+        print("######### FIN DU TABLEAU #########\n")
 
     def _print_list_of_dict(self, dict_list, key_list, headers=None):
         """
