@@ -21,7 +21,7 @@ source venv/bin/activate
 ```
 Windows 
 ```shell
-.\venv\bin\activate
+.\venv\Scripts\Activate
 ```
 * Installer les requirements 
 ```shell
