@@ -2,18 +2,25 @@ import random
 from itertools import combinations
 
 from src.dabatase import PlayerManager, TournamentManager
-from src.views import MainView
-from src.models import Match, Round
+from src.views.views import MainView
+from src.models.matches import Match
+from src.models.rounds import Round
+
 
 from src.validators import validate_date_from_str, validate_national_chess_identifier
 
 
 class MainController:
     """
-    Controlleur principal
+    Controlleur principal du jeu
     """
 
     def __init__(self):
+        """
+        Initialise le controlleur principal avec un player manager, un tournament manager et une vue
+        La variable selected_tournament permet de savoir quel tournoi on est en train de gérer
+        Go_home permet de revenir à l'acceuil depuis n'importe quel menu.
+        """
         self.player_manager = PlayerManager()
         self.tournament_manager = TournamentManager()
         self.view = MainView()
@@ -21,6 +28,10 @@ class MainController:
         self.go_home = False
 
     def main_menu(self):
+        """
+        Menu principal de l'application.
+        :return:
+        """
         text_choices = ["Gestion des joueurs",
                         "Gestion des tournois",
                         "Quitter l'application",
@@ -45,6 +56,9 @@ class MainController:
                     pass
 
     def manage_players(self):
+        """
+        Gère le menu concernant la partie Joueur de l'application
+        """
         while True and not self.go_home:
             text_choices = ["Afficher tous les joueurs",
                             "Créer un joueur",
@@ -66,6 +80,9 @@ class MainController:
                     pass
 
     def manage_tournaments(self):
+        """
+        Gère le menu concernant la partie tournoi de l'application
+        """
         x_continue = True
         while x_continue and not self.go_home:
             text_choices = ["Afficher tous les tournois",
@@ -91,6 +108,9 @@ class MainController:
                     pass
 
     def manage_tournament(self):
+        """
+        Gère la gestion d'un tournoi en fonction de son état ( non commencé, en cours, fini)
+        """
         x_continue = True
         while x_continue and not self.go_home:
             if not (self.selected_tournament.is_started() or self.selected_tournament.is_finished()):
@@ -297,8 +317,8 @@ class MainController:
                 self.view.show_error_message(
                     f"Le tournoi ne peut pas démarrer. Ces prérequis sont nécessaires : \n"
                     f"\t - Le nombre de joueur doit être pair.\n"
-                    f"\t - Le nombre de tour doit être cohérent avec le nombre de joueur.\n" 
-                    f"Pour {self.selected_tournament.number_of_rounds} tours, il faut au minimum " 
+                    f"\t - Le nombre de tour doit être cohérent avec le nombre de joueur.\n"
+                    f"Pour {self.selected_tournament.number_of_rounds} tours, il faut au minimum "
                     f"{min_player_number } joueurs. \n"
                 )
         else:
@@ -398,19 +418,3 @@ class MainController:
 
     def run(self):
         self.main_menu()
-
-
-if __name__ == '__main__':
-    from tabulate import tabulate
-
-    mc = MainController()
-    mc.selected_tournament = mc.tournament_manager.tournaments[0]
-    print(mc.selected_tournament)
-    players = mc.player_manager.players
-    print(players)
-    prop_list = ["first_name", "last_name", "birth_date", "national_chess_identifier"]
-    headers = ["Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs"]
-    mc.view.print_list_of_object(players, prop_list)
-
-    # print(tabulate(data, headers, ))
-

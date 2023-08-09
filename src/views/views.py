@@ -17,11 +17,12 @@ class MainView:
     def clear_console(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
-    def show_menu(self, choices, message = None):
+    def show_menu(self, choices, message=None):
         """
         Affiche un menu à l'utilisateur et retourne le choix
-        :param choices:
-        :return:
+        :param choices: Choix à afficher
+        :param message: message à afficher
+        :return: nombre entier représentant le menu choisi
         """
         valid_result = False
         while not valid_result:

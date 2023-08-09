@@ -1,6 +1,4 @@
-from datetime import datetime
-from typing import List
-from src.models import Player
+from src.models.players import Player
 
 
 class Match:

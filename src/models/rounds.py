@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import List
 
-from .matches import Match
+from src.models.matches import Match
 
 
 class Round:
-    def __init__(self, name, round_number, matches: List[Match], start_date: datetime = None, end_date: datetime = None):
+    def __init__(self, name, round_number, matches, start_date=None, end_date=None):
         self.name = name
         self.round_number = round_number
         self.start_date = start_date if start_date else datetime.now()

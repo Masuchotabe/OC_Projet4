@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.models import Round
+from src.models.rounds import Round
 
 
 class Tournament:
@@ -95,7 +95,6 @@ class Tournament:
                 return True
         # Sinon on return false
         return False
-
 
     def is_started(self):
         """

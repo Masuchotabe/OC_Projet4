@@ -1,7 +1,7 @@
 import os
-from typing import List
 import json
-from src.models import Player, Tournament
+from src.models.players import Player
+from src.models.tournaments import Tournament
 
 
 class PlayerManager:
@@ -149,4 +149,3 @@ class TournamentManager:
             new_id = max(id_list)+1
 
         return new_id
-
