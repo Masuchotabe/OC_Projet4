@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from src.models.matches import Match
+from models.matches import Match
 
 
 class Round:
     def __init__(self, name, round_number, matches, start_date=None, end_date=None):
         self.name = name
         self.round_number = round_number
-        self.start_date = start_date if start_date else datetime.now()
+        self.start_date = start_date if start_date else datetime.now().replace(microsecond=0)
         self.end_date = end_date
         self.matches = matches
 
@@ -15,6 +15,10 @@ class Round:
         return f"{self.name}"
 
     def to_dict(self):
+        """
+        Génère un dictionnaire à partir de l'objet
+        :return: dict de l'objet round
+        """
         return {
             "name": self.name,
             "round_number": self.round_number,
@@ -25,6 +29,12 @@ class Round:
 
     @classmethod
     def from_dict(cls, obj_dict, player_manager):
+        """
+        Crée un objet round à partir d'un dictionnaire
+        :param obj_dict: dictionnaire avec les données du round
+        :param player_manager: Obj permettant de gérer les joueurs
+        :return: Objet round
+        """
         return cls(
             name=obj_dict['name'],
             round_number=obj_dict['round_number'],
@@ -51,4 +61,4 @@ class Round:
         """
         Cloture le Round
         """
-        self.end_date = datetime.now()
+        self.end_date = datetime.now().replace(microsecond=0)

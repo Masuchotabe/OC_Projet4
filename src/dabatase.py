@@ -1,7 +1,7 @@
 import os
 import json
-from src.models.players import Player
-from src.models.tournaments import Tournament
+from models.players import Player
+from models.tournaments import Tournament
 
 
 class PlayerManager:
@@ -139,10 +139,19 @@ class TournamentManager:
         self.save_tournaments()
 
     def create_tournament(self, tournament_information):
+        """
+        Crée un tournoi avec les informations et un nouvel ID
+        :param tournament_information : informations du tournoi
+        """
         tournament = Tournament(identifier=self._get_new_identifier(), **tournament_information)
         self.add_tournament(tournament)
 
     def _get_new_identifier(self):
+        """
+        Génère un nouvel ID non existant pour le tournoi à partir de du nombre de tournois
+        Sinon, cela prend le max des ID existant et ajoute 1
+        :return: ID non existant dans la base
+        """
         new_id = len(self._tournaments)+1
         id_list = [tournament.identifier for tournament in self._tournaments]
         if new_id in id_list:

@@ -15,6 +15,9 @@ class MainView:
         """)
 
     def clear_console(self):
+        """
+        Permet de vider le terminal
+        """
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def show_menu(self, choices, message=None):
@@ -41,6 +44,10 @@ class MainView:
             print(f"ERREUR : Veuillez renseigner un entier compris entre 1 et {len(choices)}")
 
     def prompt_for_new_player(self):
+        """
+        Demande les informations du nouveau joueur
+        :return: dict du nouveau joueur
+        """
         self.clear_console()
         print("Veuillez renseigner les informations du nouveau joueur : ")
         first_name = input("Son prénom : \n")
@@ -53,6 +60,10 @@ class MainView:
                 'national_chess_identifier': national_chess_identifier}
 
     def prompt_for_new_tournament(self):
+        """
+        Demande les informations du nouveau tournoi
+        :return: dict du nouveau tournoi
+        """
         self.clear_console()
         print("Veuillez renseigner les informations du nouveau tournois : ")
         name = input("Son nom : \n")
@@ -71,53 +82,74 @@ class MainView:
                 }
 
     def show_players_list(self, players, sort_by_last_name=True):
+        """
+        Permet d'afficher la liste de joueur en tableau
+        :param players: Liste de joueur
+        :param sort_by_last_name: Définit si les joueurs doivent être triés par last_name
+        """
         self.clear_console()
 
         property_list = ["first_name", "last_name", "birth_date", "national_chess_identifier"]
         headers = ["Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs"]
         if sort_by_last_name:
             players.sort(key=lambda player: player.last_name.lower())
-        self.print_list_of_object(players, property_list, headers)
+        self._print_list_of_object(players, property_list, headers)
 
     def show_players_score(self, players_dict_list, sort_by_last_name=True):
+        """
+        Permet d'afficher le score et le rang des joueurs
+        :param players_dict_list: Dictionnaire avec info sur les joueurs et leur score
+        :param sort_by_last_name: Définit si les joueurs doivent être triés par last_name
+        """
         self.clear_console()
 
         property_list = ["rank", "first_name", "last_name", "birth_date", "national_chess_identifier", "score"]
         headers = ["Rang", "Prénom", "Nom", "Date de naissance", "Identifiant national d'échecs", "Score"]
         if sort_by_last_name:
             players_dict_list.sort(key=lambda player: player['last_name'])
-        self.print_list_of_dict(players_dict_list, property_list, headers)
+        self._print_list_of_dict(players_dict_list, property_list, headers)
 
     def show_tournaments_list(self, tournaments):
+        """
+        Permet d'afficher
+        :param tournaments:
+        :return:
+        """
         self.clear_console()
         property_list = ["name", "location", "start_date", "end_date", "description"]
         headers = ["Nom", "Lieu", "Date de début", "Date de fin", "Description"]
-        self.print_list_of_object(tournaments, property_list, headers)
+        self._(tournaments, property_list, headers)
 
     def show_tournament(self, tournament):
-        self.clear_console()
-
-        print(f"Tournoi {tournament.name} du {tournament.start_date} au {tournament.end_date}")
+        """
+        Affiche le nom du tournoi et la liste de ses rounds
+        :param tournament : objet Tournoi
+        """
+        print(f"\nTournoi {tournament.name} du {tournament.start_date} au {tournament.end_date}")
         for round in tournament.rounds:
             if round.round_number != tournament.actual_round_number:
                 print(f"{round.name}")
             else:
-                print(f"{round.name} - Round actuel")
+                print(f"{round.name} - Tour actuel")
 
     def show_round_list(self, round_list):
         """
         Affiche la liste des rounds
-        :param round_list:
+        :param round_list: liste des rounds
         """
         property_list = ["name", "start_date", "end_date"]
         headers = ["Nom", "Date de début", "Date de fin"]
-        self.print_list_of_object(round_list, property_list, headers)
+        self._print_list_of_object(round_list, property_list, headers)
 
     def show_round(self, tournament_round):
         self.clear_console()
         print(f"\n{tournament_round.name}")
-        for match in tournament_round.matches:
-            print(match)
+        property_list = ["player_1", "score_1", "player_2", "score_2"]
+        headers = ["Joueur 1", "Score 1", "Joueur 2", "Score 2"]
+        self._print_list_of_object(tournament_round.matches, property_list, headers)
+        # for match in tournament_round.matches:
+        #
+        #     print(match)
 
     def prompt_for_player_id(self, player_list):
         """
@@ -137,7 +169,7 @@ class MainView:
         else:
             return first_player_id
 
-    def print_list_of_object(self, object_list, property_list, headers=None):
+    def _print_list_of_object(self, object_list, property_list, headers=None):
         """
         Permet de print en tableau une liste d'élément avec les property contenu dans property_list
         :param object_list: liste d'objets à afficher
@@ -156,9 +188,9 @@ class MainView:
         print(tabulate(data_to_print, headers, stralign='center', numalign='center'))
         print("######### FIN DU TABLEAU #########")
 
-    def print_list_of_dict(self, dict_list, key_list, headers=None):
+    def _print_list_of_dict(self, dict_list, key_list, headers=None):
         """
-        Permet de print en tableau une liste de dictionnaire avec les clé contenu dans key_list
+        Permet de print en tableau une liste de dictionnaire avec les clés contenu dans key_list
         :param dict_list: liste de dictionnaire à afficher
         :param key_list: liste de clé à afficher (sert également de header au tableau)
         :param headers: Surcharge les en-tetes du tableau

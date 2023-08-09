@@ -1,13 +1,13 @@
 import random
 from itertools import combinations
 
-from src.dabatase import PlayerManager, TournamentManager
-from src.views.views import MainView
-from src.models.matches import Match
-from src.models.rounds import Round
+from dabatase import PlayerManager, TournamentManager
+from views.views import MainView
+from models.matches import Match
+from models.rounds import Round
 
 
-from src.validators import validate_date_from_str, validate_national_chess_identifier
+from validators import validate_date_from_str, validate_national_chess_identifier
 
 
 class MainController:
@@ -98,8 +98,13 @@ class MainController:
                 case 2:
                     self.add_new_tournament()
                 case 3:
-                    self.select_tournament()
-                    self.manage_tournament()
+                    if len(self.tournament_manager.tournaments) > 0:
+                        self.select_tournament()
+                        self.manage_tournament()
+                    else:
+                        self.view.show_error_message(
+                            "Il n'y a aucun tournoi dans la base. Veuillez créer un tournoi pour commencer"
+                        )
                 case 4:
                     x_continue = False
                 case 5:
@@ -109,7 +114,7 @@ class MainController:
 
     def manage_tournament(self):
         """
-        Gère la gestion d'un tournoi en fonction de son état ( non commencé, en cours, fini)
+        Gère la gestion d'un tournoi en fonction de son état (non commencé, en cours, fini)
         """
         x_continue = True
         while x_continue and not self.go_home:
@@ -122,10 +127,11 @@ class MainController:
 
     def manage_not_start_tournament(self):
         """
-
-        :return:
+        Gestion du tournoi non commencé
+        :return: True si on reste sur la gestion du tournoi, False si on veut revenir au menu précédent
         """
         text_choices = ["Ajouter un joueur",
+                        "Voir la liste des joueurs",
                         "Démarrer",
                         "Revenir au menu précédent",
                         "Revenir à l'accueil",
@@ -133,21 +139,32 @@ class MainController:
         result_choice = int(self.view.show_menu(choices=text_choices))
         match result_choice:
             case 1:
-                self.add_player_to_tournament()
+                if self.player_manager.players:
+                    self.add_player_to_tournament()
+                else:
+                    self.view.show_error_message(
+                        "Aucun joueur n'est présent dans la base. Veuillez d'abord ajouter des joueurs dans la base."
+                    )
             case 2:
-                self.start_tournament()
+                self.view.show_players_list(self.selected_tournament.players)
             case 3:
-                return False
+                self.start_tournament()
             case 4:
+                return False
+            case 5:
                 self.go_home = True
             case _:
                 pass
         return True
 
     def manage_in_progress_tournament(self):
+        """
+        Gestion d'un tournoi en cours
+        :return: True si on reste sur la gestion du tournoi, False si on veut revenir au menu précédent
+        """
         actual_round = self.selected_tournament.get_actual_round()
         text_choices = [
-            "Voir les rounds",
+            "Gérer les tours",
             f"Renseigner les résultats : {actual_round.name}" if not actual_round.is_finished()
             else "Démarrer le tour suivant",
             "Classement des joueurs",
@@ -175,6 +192,10 @@ class MainController:
         return True
 
     def manage_finished_tournament(self):
+        """
+        Gestion d'un tournoi terminé
+        :return: True si on reste sur la gestion du tournoi, False si on veut revenir au menu précédent
+        """
         text_choices = ["Voir la liste des joueurs",
                         "Classement des joueurs",
                         "Voir la liste des tours",
@@ -202,6 +223,9 @@ class MainController:
         return True
 
     def manage_rounds(self):
+        """
+        Gestion des rounds (résultats, liste de match ...)
+        """
         x_continue = True
         while x_continue and not self.go_home:
             self.view.show_tournament(self.selected_tournament)
@@ -230,13 +254,16 @@ class MainController:
                     pass
 
     def view_round(self):
+        """
+        Affiche le détail d'un round
+        """
         message = "Veuillez choisir un tour dans la liste par son numéro : "
         result_choice = int(self.view.show_menu(choices=self.selected_tournament.rounds, message=message))
         self.view.show_round(self.selected_tournament.rounds[result_choice - 1])
 
     def manage_actual_round(self):
         """
-        Permet de completer les résultats des rounds
+        Permet de renseigner les résultats des matchs en cours. Enregistre les résultats et met à jour les scores.
         """
         actual_round = self.selected_tournament.get_actual_round()
         self.view.show_round(actual_round)
@@ -246,7 +273,7 @@ class MainController:
                 text_choices = [f"{match.player_1} a gagné",
                                 f"{match.player_2} a gagné",
                                 "Match nul",
-                                "Retour"
+                                "Match suivant"
                                 ]
                 result_choice = int(self.view.show_menu(message=message, choices=text_choices))
                 match result_choice:
@@ -282,6 +309,11 @@ class MainController:
             self.view.show_error_message("La création a échouée. Veuillez réessayer.")
 
     def validate_tournament_data(self, tournament_data):
+        """
+        Valide les données du tournoi
+        :param tournament_data : Données du tournoi
+        :return: True si les données sont valides
+        """
         data_valid = True
         if isinstance(tournament_data, dict):
             if isinstance(tournament_data['number_of_rounds'], int):
@@ -325,6 +357,9 @@ class MainController:
             self.view.show_error_message("Le tournoi est déjà commencé.")
 
     def add_new_player(self):
+        """
+        Gère la création d'un nouveau joueur
+        """
         player_data = self.view.prompt_for_new_player()
         if self.validate_player_data(player_data):
             self.player_manager.create_player(player_data)
@@ -332,6 +367,11 @@ class MainController:
             self.view.show_error_message("La création a échouée. Veuillez réessayer.")
 
     def validate_player_data(self, player_data):
+        """
+        Valide les données d'un joueur
+        :param player_data: données du joueur
+        :return: True si les données sont valides
+        """
         data_valid = True
         if isinstance(player_data, dict):
 
@@ -354,6 +394,11 @@ class MainController:
             return data_valid
 
     def add_player_to_tournament(self):
+        """
+        Sélection et ajout d'un joueur par son identifiant national d'échec (INE) dans un tournoi.
+        Par défaut, le INE du premier joueur de la liste sera ajouté. Ne propose que les joueurs non présents
+        dans le tournoi
+        """
         if not self.selected_tournament.is_started():
             player_id_list = [p.national_chess_identifier for p in self.selected_tournament.players]
             player_list = [p for p in self.player_manager.players if p.national_chess_identifier not in player_id_list]
@@ -385,6 +430,9 @@ class MainController:
             self.view.show_error_message("Le tournoi est déjà terminé")
 
     def get_new_matches(self):
+        """
+        Récupère les matchs générés en fcontion de l'état du tournoi
+        """
         if self.selected_tournament.is_started():
             new_matches = self.generate_ordered_match()
         else:
@@ -392,6 +440,11 @@ class MainController:
         return new_matches
 
     def generate_ordered_match(self):
+        """
+        Génère les matchs en fonction du classement des joueurs et des matchs déjà joués.
+        Il n'est pas possible de générer un match ayant déjà été joué. (deux joueurs se rencontrent une seule fois)
+        :return: Liste des nouveaux matchs
+        """
         ordered_player_list = self.selected_tournament.get_ordered_player_list()
         possible_match = [Match(e[0], e[1]) for e in combinations(ordered_player_list, 2)
                           if not Match(e[0], e[1]) in self.selected_tournament.matches]
@@ -407,11 +460,18 @@ class MainController:
         return new_matches
 
     def generate_random_match(self):
+        """
+        Génère des matchs de manière aléatoire.
+        :return: Liste des nouveaux matchs
+        """
         players_list = self.selected_tournament.players
         random.shuffle(players_list)
         return [Match(player_1=x, player_2=y) for x, y in zip(players_list[::2], players_list[1::2])]
 
     def select_tournament(self):
+        """
+        Permet de sélectionner le tournoi à gérer
+        """
         message = "Veuillez choisir un tournoi dans la liste par son id : "
         result_choice = int(self.view.show_menu(choices=self.tournament_manager.tournaments, message=message))
         self.selected_tournament = self.tournament_manager.tournaments[result_choice-1]

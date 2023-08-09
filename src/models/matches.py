@@ -1,4 +1,4 @@
-from src.models.players import Player
+from models.players import Player
 
 
 class Match:
@@ -23,6 +23,10 @@ class Match:
         return False
 
     def to_dict(self):
+        """
+        Génère un dictionnaire à partir de l'objet
+        :return: dict de l'objet match
+        """
         return {
             "player_1": self.player_1.national_chess_identifier,
             "player_2": self.player_2.national_chess_identifier,
@@ -32,6 +36,12 @@ class Match:
 
     @classmethod
     def from_dict(cls, obj_dict, player_manager):
+        """
+        Crée un objet Match à partir d'un dictionnaire
+        :param obj_dict: dictionnaire avec les données du Match
+        :param player_manager: Obj permettant de gérer les joueurs
+        :return: Objet Match
+        """
         return cls(
             player_1=player_manager.get_player(national_chess_identifier=obj_dict['player_1']),
             player_2=player_manager.get_player(national_chess_identifier=obj_dict['player_2']),

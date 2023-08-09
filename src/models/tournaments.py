@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.models.rounds import Round
+from models.rounds import Round
 
 
 class Tournament:
@@ -32,6 +32,10 @@ class Tournament:
         return f"{self.name} - {self.location} - {self.start_date}"
 
     def to_dict(self):
+        """
+        Génère un dictionnaire à partir de l'objet
+        :return: dict de l'objet tournament
+        """
         return {
             'identifier': self.identifier,
             'name': self.name,
@@ -50,6 +54,12 @@ class Tournament:
 
     @classmethod
     def from_dict(cls, obj_dict, player_manager):
+        """
+        Crée un objet Tournament à partir d'un dictionnaire
+        :param obj_dict: dictionnaire avec les données du Tournament
+        :param player_manager: Obj permettant de gérer les joueurs
+        :return: Objet Tournament
+        """
         return cls(
             identifier=obj_dict['identifier'],
             name=obj_dict['name'],
