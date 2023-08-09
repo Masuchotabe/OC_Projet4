@@ -29,7 +29,11 @@ class Tournament:
                                if not players_scores and players else players_scores)
 
     def __repr__(self):
-        return f"{self.name} - {self.location} - {self.start_date}"
+        if self.is_finished():
+            return f"{self.name} - {self.location} - {self.start_date} - {self.end_date} - TERMINE"
+        elif self.is_started():
+            return f"{self.name} - {self.location} - {self.start_date} - {self.end_date} - EN COURS"
+        return f"{self.name} - {self.location} - {self.start_date} - {self.end_date} - NON DEMARRE"
 
     def to_dict(self):
         """

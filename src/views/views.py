@@ -50,10 +50,10 @@ class MainView:
         """
         self.clear_console()
         print("Veuillez renseigner les informations du nouveau joueur : ")
-        first_name = input("Son prénom : \n")
-        last_name = input("Son nom de famille : \n")
-        birth_date = input("Sa date de naissance (jj/mm/aaaa) : \n")
-        national_chess_identifier = input("Son identifiant national d'échecs (AAXXXXX) : \n")
+        first_name = input("Son prénom* : \n")
+        last_name = input("Son nom de famille* : \n")
+        birth_date = input("Sa date de naissance (jj/mm/aaaa)* : \n")
+        national_chess_identifier = input("Son identifiant national d'échecs (AAXXXXX)* : \n")
         return {'first_name': first_name,
                 'last_name': last_name,
                 'birth_date': birth_date,
@@ -66,12 +66,12 @@ class MainView:
         """
         self.clear_console()
         print("Veuillez renseigner les informations du nouveau tournois : ")
-        name = input("Son nom : \n")
+        name = input("Son nom* : \n")
         description = input("Sa description : \n")
-        location = input("Son lieu : \n")
-        number_of_rounds = input("nombre de tours : \n")
-        start_date = input("Sa date de début (jj/mm/aaaa) : \n")
-        end_date = input("Sa date de fin (jj/mm/aaaa) : \n")
+        location = input("Son lieu* : \n")
+        number_of_rounds = input("nombre de tours* : \n")
+        start_date = input("Sa date de début (jj/mm/aaaa)* : \n")
+        end_date = input("Sa date de fin (jj/mm/aaaa)* : \n")
 
         return {'name': name,
                 'description': description,

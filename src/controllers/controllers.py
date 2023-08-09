@@ -86,8 +86,8 @@ class MainController:
         x_continue = True
         while x_continue and not self.go_home:
             text_choices = ["Afficher tous les tournois",
-                            "Créer un tournois",
-                            "Gérer un  tournois",
+                            "Créer un tournoi",
+                            "Gérer un  tournoi",
                             "Revenir au menu précédent",
                             "Revenir à l'accueil",
                             ]
@@ -269,7 +269,7 @@ class MainController:
         self.view.show_round(actual_round)
         for match in actual_round.matches:
             if not match.has_result():
-                message = "Veuillez choisir le résultat du match : "
+                message = f"Veuillez choisir le résultat du match {match.player_1} VS {match.player_2} : "
                 text_choices = [f"{match.player_1} a gagné",
                                 f"{match.player_2} a gagné",
                                 "Match nul",
@@ -316,6 +316,14 @@ class MainController:
         """
         data_valid = True
         if isinstance(tournament_data, dict):
+            if not (
+                tournament_data['number_of_rounds']
+                and tournament_data['name']
+                and tournament_data['location']
+                and tournament_data['start_date']
+                and tournament_data['end_date']
+            ):
+                self.view.show_error_message("Veuillez compléter tous les champs obligatoires")
             if isinstance(tournament_data['number_of_rounds'], int):
                 if not tournament_data['number_of_rounds'] > 0:
                     self.view.show_error_message("Le nombre de tours doit être un entier supérieur à 0.")
@@ -324,6 +332,9 @@ class MainController:
                 if not all(c.isdigit() for c in tournament_data['number_of_rounds']):
                     self.view.show_error_message("Le nombre de tours doit être un entier positifs.")
                     data_valid = False
+            elif tournament_data['number_of_rounds'] is None:
+                self.view.show_error_message("Le nombre de tours doit être renseigné.")
+                data_valid = False
             if not (validate_date_from_str(tournament_data['start_date']) or validate_date_from_str('end_date')):
                 self.view.show_error_message("Les dates doivent être au format JJ/MM/AAAA.")
                 data_valid = False
@@ -374,6 +385,8 @@ class MainController:
         """
         data_valid = True
         if isinstance(player_data, dict):
+            if not all(value for value in player_data.values()):
+                self.view.show_error_message("Veuillez compléter tous les champs obligatoires")
 
             if self.player_manager.get_player(player_data['national_chess_identifier']):
                 self.view.show_error_message(
@@ -426,6 +439,7 @@ class MainController:
             self.selected_tournament.rounds.append(new_round)
             self.selected_tournament.actual_round_number = next_round_number
             self.tournament_manager.save_tournaments()
+            self.view.show_round(new_round)
         else:
             self.view.show_error_message("Le tournoi est déjà terminé")
 
