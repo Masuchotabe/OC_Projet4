@@ -3,7 +3,21 @@
 ## Gestion de tournoi d'échecs
 
 <!-- TOC -->
-* [Installation](#installation)
+* [OC P4 : Développer un programme logiciel en utilisant Python](#oc-p4--dvelopper-un-programme-logiciel-en-utilisant-python)
+  * [Gestion de tournoi d'échecs](#gestion-de-tournoi-dchecs)
+    * [Installation](#installation)
+    * [Démarrer le projet](#dmarrer-le-projet)
+    * [Utilisation](#utilisation)
+      * [Créer un joueur](#crer-un-joueur)
+      * [Créer un nouveau tournoi](#crer-un-nouveau-tournoi)
+      * [Démarrer un tournoi](#dmarrer-un-tournoi)
+    * [Rapport](#rapport)
+      * [Liste de tous les joueurs par ordre alphabétique](#liste-de-tous-les-joueurs-par-ordre-alphabtique)
+      * [liste de tous les tournois](#liste-de-tous-les-tournois)
+      * [Nom et dates d'un tournoi](#nom-et-dates-dun-tournoi)
+      * [Liste des joueurs du tournoi](#liste-des-joueurs-du-tournoi)
+      * [Liste des tours et liste des matchs d'un tour](#liste-des-tours-et-liste-des-matchs-dun-tour)
+    * [Rapport flake8](#rapport-flake8)
 <!-- TOC -->
 
 ### Installation 
@@ -57,13 +71,27 @@ Lorsque tous les matchs ont été renseignés, vous pouvez générer le tour sui
 
 ### Rapport 
 #### Liste de tous les joueurs par ordre alphabétique
-Gestion des joueurs --> Afficher tous les joueurs
+"Gestion des joueurs" --> "Afficher tous les joueurs"
 
-#### liste de tous les tournois
+#### Liste de tous les tournois
+"Gestion des tournois" --> "Afficher tous les tournois"
 
+#### Nom et dates d'un tournoi
+"Gestion des tournois" --> "Afficher tous les tournois". 
+Les dates de début de fin sont affichées dans la liste. 
+
+#### Liste des joueurs du tournoi
+"Gestion des tournois" --> "Gérer un tournoi"
+Choisissez le tournoi souhaité puis sélectionnez "Voir la liste des joueurs"
+
+#### Liste des tours et liste des matchs d'un tour
+"Gestion des tournois" --> "Gérer un tournoi"
+Choisissez le tournoi souhaité (en cours ou terminé) puis sélectionnez "Voir la liste des tours"
+pour avoir la liste des tours. 
+Pour les matchs, il suffit de sélectionner "Voir les matchs d'un tour" et de choisir le tour. 
 
 ### Rapport flake8 
-Un rapport flake8 est présent dans le répertoire src/flake8_rapport
+Un rapport flake8 est présent dans le répertoire src/flake8_rapport. 
 Vous pouvez en générer un nouveau avec la commande suivante depuis le répertoire src : 
 ```shell
 flake8
