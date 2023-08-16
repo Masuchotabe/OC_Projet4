@@ -3,16 +3,16 @@
 ## Gestion de tournoi d'échecs
 
 <!-- TOC -->
-* [OC P4 : Développer un programme logiciel en utilisant Python](#oc-p4--dvelopper-un-programme-logiciel-en-utilisant-python)
-  * [Gestion de tournoi d'échecs](#gestion-de-tournoi-dchecs)
+* [OC P4 : Développer un programme logiciel en utilisant Python](#oc-p4--d%C3%A9velopper-un-programme-logiciel-en-utilisant-python)
+  * [Gestion de tournoi d'échecs](#gestion-de-tournoi-d%C3%A9checs)
     * [Installation](#installation)
     * [Démarrer le projet](#d%C3%A9marrer-le-projet)
     * [Utilisation](#utilisation)
-      * [Créer un joueur](#crer-un-joueur)
-      * [Créer un nouveau tournoi](#crer-un-nouveau-tournoi)
-      * [Démarrer un tournoi](#dmarrer-un-tournoi)
+      * [Créer un joueur](#cr%C3%A9er-un-joueur)
+      * [Créer un nouveau tournoi](#cr%C3%A9er-un-nouveau-tournoi)
+      * [Démarrer un tournoi](#d%C3%A9marrer-un-tournoi)
     * [Rapport](#rapport)
-      * [Liste de tous les joueurs par ordre alphabétique](#liste-de-tous-les-joueurs-par-ordre-alphabtique)
+      * [Liste de tous les joueurs par ordre alphabétique](#liste-de-tous-les-joueurs-par-ordre-alphab%C3%A9tique)
       * [Liste de tous les tournois](#liste-de-tous-les-tournois)
       * [Nom et dates d'un tournoi](#nom-et-dates-dun-tournoi)
       * [Liste des joueurs du tournoi](#liste-des-joueurs-du-tournoi)
