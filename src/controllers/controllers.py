@@ -168,6 +168,8 @@ class MainController:
             f"Renseigner les résultats : {actual_round.name}" if not actual_round.is_finished()
             else "Démarrer le tour suivant",
             "Classement des joueurs",
+            "Voir la liste des tours",
+            "Voir les matchs d'un tour",
             "Revenir au menu précédent",
             "Revenir à l'accueil",
         ]
@@ -184,8 +186,12 @@ class MainController:
                 player_dict_list = self.selected_tournament.get_ranked_player_list()
                 self.view.show_players_score(player_dict_list, sort_by_last_name=False)
             case 4:
-                return False
+                self.view.show_round_list(self.selected_tournament.rounds)
             case 5:
+                self.view_round()
+            case 6:
+                return False
+            case 7:
                 self.go_home = True
             case _:
                 pass
